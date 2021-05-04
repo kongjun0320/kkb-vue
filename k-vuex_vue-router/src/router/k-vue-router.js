@@ -19,14 +19,14 @@ class VueRouter {
         return vm.current
       },
       set(value) {
-        if(value !== this.current) {
+        if (value !== this.current) {
           vm.current = value
         }
       }
     })
-    // this.current = vm.current
+
     // defineReactive
-    // _Vue.util.defineReactive(this, 'current', window.location.hash.slice(1))
+    // _Vue.util.defineReactive(this, 'current', window.location.hash.slice(1) || '/')
 
     window.addEventListener('hashchange', () => {
       this.current = window.location.hash.slice(1)
