@@ -31,6 +31,7 @@ class Watcher {
     this.updateFn = updateFn
 
     Dep.target = this
+    // 触发get 为了去收集依赖
     this.vm[this.key]
     Dep.target = null
   }
@@ -94,6 +95,13 @@ class Compiler {
   html(node, expr) {
     this.update(node, expr, 'html')
   }
+  model(node, expr) {
+    this.update(node, expr, 'model')
+
+    node.addEventListener('input', (e) => {
+      this.$vm[expr] = e.target.value
+    })
+  }
   update(node, expr, dir) {
     // 初始化
     const fn = this[dir + 'Updater']
@@ -103,6 +111,9 @@ class Compiler {
       fn && fn(node, value)
     })
   }
+  modelUpdater(node, value) {
+    node.value = value
+  }
   htmlUpdater(node, value) {
     node.innerHTML = value
   }
@@ -111,7 +122,6 @@ class Compiler {
   }
   compileText(node) {
     const expr = RegExp.$1.trim()
-    // node.textContent = this.$vm[expr]
     this.update(node, expr, 'text')
   }
   isDirective(attrName) {

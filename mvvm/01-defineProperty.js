@@ -1,3 +1,12 @@
+const originProto = Array.prototype
+const arrProto = Object.create(originProto)
+
+;['push'].forEach((method) => {
+  arrProto[method].apply(this, arguments)
+  // 派发更新
+  console.log('触发了' + method + '方法')
+})
+
 function defineReactive(obj, key, val) {
   observe(val)
   Object.defineProperty(obj, key, {
@@ -17,7 +26,11 @@ function defineReactive(obj, key, val) {
 
 function observe(obj) {
   if (typeof obj === 'object' && obj !== null) {
-    Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key]))
+    if (Array.isArray(obj)) {
+      obj.__proto__ = arrProto
+    } else {
+      Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key]))
+    }
   }
 }
 
