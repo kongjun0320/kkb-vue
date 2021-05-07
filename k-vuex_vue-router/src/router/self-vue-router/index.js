@@ -22,6 +22,7 @@ export default class VueRouter {
     })
   }
   match(location) {
+    console.log(this.matcher.match(location))
     return this.matcher.match(location)
   }
 }

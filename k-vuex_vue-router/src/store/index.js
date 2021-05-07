@@ -1,30 +1,31 @@
 import Vue from 'vue'
+// import Vuex from './k-vuex'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    age: 10
+    counter: 0
   },
   getters: {
-    myAge(state) {
-      return state.age * 2
+    doubleCounter: (state) => {
+      return state.counter * 2
+    },
+    tripleCounter: (state) => {
+      return state.counter * 3
     }
   },
   mutations: {
-    syncChange(state, payload) {
-      state.age += payload
-    },
-    asyncChange(state, payload) {
-      state.age += payload
+    add(state) {
+      state.counter++
     }
   },
   actions: {
-    asyncChange({ commit }, payload) {
+    add({ commit }) {
       setTimeout(() => {
-        commit('asyncChange', payload)
-      }, 1000)
+        commit('add')
+      }, 500)
     }
   },
   modules: {}
